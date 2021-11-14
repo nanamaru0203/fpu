@@ -62,7 +62,8 @@ module finv(input logic clk,
         s2<=s1;
         m1<={2'b01,x[22:0]};
         //stage2
-        e3<=253-e2;
+        //ここだけ変更
+        e3<=(e2>253)? 8'd0 : 253-e2;
         s3<=s2;
         m2<=m1*a;
         b2<=(b<<1);
