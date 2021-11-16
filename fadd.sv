@@ -29,7 +29,7 @@ module fadd(input logic clk,
         //stage2
         s2<=s1;
         e2<=e1;
-        m2<=(calc)? ({2'b01,big_x}-{2'b01,small_x}) : ({2'b01,big_x}+{2'b01,small_x});
+        m2<=(calc)? (big_x-small_x) : (big_x+small_x);
         //stage3
         if(m2[24]==1'b1) begin
                 y<={s2,e2+8'd1,m2[23:1]};
@@ -81,8 +81,6 @@ module fadd(input logic clk,
                 y<={s2,e2-8'd22,m2[0],22'd0};
         end else if(m2[0]==1'b1) begin
                 y<={s2,e2-8'd23,23'd0};
-        end else if(m2[4]==1'b1) begin
-                y<={s2,e2-8'd19,m2[3:0],19'd0};
         end else begin
                 y<=32'd0;
         end
@@ -140,6 +138,10 @@ module test;
       #10;
       x1=32'h40200000;
       x2=32'h40000000;
+      #10;
+      //-12345.678+32.4
+      x1=32'hc640e6b6;
+      x2=32'h4201999a;
    end
 
 endmodule
