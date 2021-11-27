@@ -1,0 +1,6 @@
+/desktop
+/vivado-boards
+/digilent-xdc
+a.out
+uut.vcd
+gpu.c
