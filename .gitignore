@@ -4,3 +4,5 @@
 a.out
 uut.vcd
 gpu.c
+#fmul.sv#
+.DS_Store
