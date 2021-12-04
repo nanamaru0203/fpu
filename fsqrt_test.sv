@@ -2,17 +2,18 @@ module test;
     logic [31:0] x;
     logic clk;
     logic [31:0] y;
-    logic [23:0] a;
-    logic [48:0] m2;
-    logic [48:0] m3;
     fsqrt uut(.clk(clk),.x(x),.y(y));
+    logic [23:0] a;
+    logic [23:0] b;
+    logic [23:0] x_2;
+    logic [23:0] a_x;
     assign a=uut.a;
-    assign m2=uut.m2;
-    assign m3=uut.m3;
-
+    assign b=uut.b;
+    assign x_2=uut.x_2;
+    assign a_x=uut.a_x;
     initial begin
       $dumpfile("uut.vcd");
-      $dumpvars(0,clk,x,y,a,m2,m3);
+      $dumpvars(0,clk,x,y,a,b,x_2,a_x);
     end
 
     initial begin
@@ -39,6 +40,8 @@ module test;
       #10;
       //2
       x=32'h40000000;
+      #10;
+      x=32'h40800000;
    end
 
 endmodule
