@@ -2,7 +2,9 @@ module ram_fsqrt(input logic clk,
            input logic [9:0] addr,
            output logic [23:0] a,
            output logic [23:0] b);
+    (* ram_style = "block" *)
     logic [23:0] mem_a [1023:0];
+    (* ram_style = "block" *)
     logic [23:0] mem_b [1023:0];
     always@(posedge clk) begin
         a<=mem_a[addr];
