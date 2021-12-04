@@ -47,7 +47,7 @@ module finv(input logic clk,
     logic [23:0] a;
     logic [23:0] b;
     logic [48:0] b2;
-    ram ram_finv(.clk(clk),.load(1'b0),.addr(addr),.in_a(24'd0),.in_b(24'd0),.a(a),.b(b));
+    ram_finv ram_finv(.clk(clk),.load(1'b0),.addr(addr),.in_a(24'd0),.in_b(24'd0),.a(a),.b(b));
     logic [24:0] m1;
     logic [48:0] m2;
     logic [48:0] m3;

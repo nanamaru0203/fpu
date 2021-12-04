@@ -4,10 +4,11 @@ module test;
     logic clk;
     wire [31:0] y;
     fdiv uut(.clk(clk),.x1(x1),.x2(x2),.y(y));
-
+    logic [31:0] inv_x2;
+    assign inv_x2=uut.inv_x2;
     initial begin
       $dumpfile("uut.vcd");
-      $dumpvars(0,clk,x1,x2,y);
+      $dumpvars(0,clk,x1,x2,y,inv_x2);
     end
 
     initial begin
@@ -50,6 +51,9 @@ module test;
       //1.1*2^127/ 1.2*2^126 =1.83333333333
       x1=32'h7f0ccccd;
       x2=32'h7e99999a;
+      #10;
+      x1=32'b00001101111011000000000010111110;
+      x2=32'b01111110101111100110111111110001;
    end
 
 endmodule
