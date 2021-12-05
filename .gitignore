@@ -3,6 +3,7 @@
 /digilent-xdc
 a.out
 uut.vcd
+fsqrt.sv
 gpu.c
 #fmul.sv#
 .DS_Store

@@ -48,13 +48,18 @@ module fsqrt(input logic clk,
     logic [25:0] hh;
     logic [25:0] hl;
     logic [25:0] lh;
+    logic [25:0] hh2;
+    logic [25:0] hllh;
     assign  addr=x[22:13];
     logic [23:0] a;
     logic [23:0] b;
     logic zero;
     ram_fsqrt ram_fsqrt(.clk(clk),.addr(addr),.even(x[23]),.a(a),.b(b));
     logic [31:0] tmp;
-    assign a_x=hh+(hl>>11)+(lh>>11)+26'd2;
+    assign hh={1'b1,m1[22:11]}*b[23:11];
+    assign hl={1'b1,m1[22:11]}*b[10:0];
+    assign lh=m1[10:0]*b[23:11];
+    assign a_x=hh2+hllh;
     assign m2= x_2+a_x[25:2];
     assign tmp=(zero)? 32'd0 : {1'b0,e2,m2[22:0]};
     always@(posedge clk)begin
@@ -65,9 +70,8 @@ module fsqrt(input logic clk,
         e2<=((e1-127)>>1)+127;
         zero<=(e1==8'd0)? 1'b1 : 1'b0;
         x_2<=a>>1;
-        hh<={1'b1,m1[22:11]}*b[23:11];
-        hl<={1'b1,m1[22:11]}*b[10:0];
-        lh<=m1[10:0]*b[23:11];
+        hh2<=hh+26'd2;
+        hllh<=(hl>>11)+(lh>>11);
         //stage3
         y<=tmp;
     end
