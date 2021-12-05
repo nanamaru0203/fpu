@@ -42,6 +42,8 @@ module test;
       x=32'h40000000;
       #10;
       x=32'h40800000;
+      #10;
+      x=32'h40a00000;
    end
 
 endmodule
