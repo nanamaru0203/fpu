@@ -21,15 +21,15 @@ module ram_fsqrt(input logic clk,
         end
     end
 
-    integer i;
+    longint i;
+    longint x0;
     initial begin
         for(i=0;i<1024;i=i+1) begin
-            longint x0;
-            x0=(($sqrt((1024+i)<<20))+($sqrt((1025+i)<<20)))/2;
+            x0=(($sqrt((64'd1024+i)<<20))+($sqrt((64'd1025+i)<<20)))/64'd2;
             mem_a[i]=x0<<8;
-            mem_b[i]=(1<<46)/(x0<<8);
-            mem_c[i]=(x0*47453133)>>17;
-            mem_d[i]=(47453132<<21)/(x0<<8);
+            mem_b[i]=(64'd1<<46)/(x0<<8);
+            mem_c[i]=(x0*64'd47453133)>>17;
+            mem_d[i]=(64'd47453132<<21)/(x0<<8);
         end
     end
 endmodule

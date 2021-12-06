@@ -16,12 +16,12 @@ module ram_finv(input logic clk,
         b<=mem_b[addr];
     end
 
-    integer i;
+    longint i;
+    longint x0;
+    longint x1;
     initial begin
         for(i=0;i<1024;i=i+1) begin
-            longint x0;
-            longint x1;
-            x0=(((1<<46)/((1024+i)*4096))+((1<<46)/((1025+i)*4096)))/2;
+            x0=(((64'd1<<46)/((64'd1024+i)*64'd4096))+((64'd1<<46)/((64'd1025+i)*64'd4096)))/64'd2;
             x1=x0*x0;
             mem_a[i]=(x1>>24);
             mem_b[i]=x0;
