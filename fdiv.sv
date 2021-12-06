@@ -9,6 +9,7 @@ module fdiv(input logic clk,
     assign modified_x2={x2[31],x2[30:23]-e_diff1,x2[22:0]};
     logic [31:0] inv_x2;
     logic [31:0] tmp;
+    logic [31:0] x1_4;
     finv uut1(.clk(clk),.x(modified_x2),.y(inv_x2));
     fmul uut2(.x1(x1_4),.x2(inv_x2),.clk(clk),.y(tmp));
     logic [7:0] e_diff2;
@@ -19,7 +20,6 @@ module fdiv(input logic clk,
     logic [7:0] e_diff7;
     logic [31:0] x1_2;
     logic [31:0] x1_3;
-    logic [31:0] x1_4;
     always@(posedge clk) begin
         //stage1
         e_diff2<=e_diff1;
