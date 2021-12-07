@@ -5,13 +5,12 @@ module cache(input logic [26:0] addr,
              output logic hit,
              output logic [26:0] ddr2_addr);
 
-    parameter block_size =10;
-    
-    logic [31:0] ram_data [(1<<block_size)-1:0];
-    //バイトアドレッシングなのでオフセット2
-    logic [(24-block_size):0] ram_tag [(1<<block_size)-1:0];
-    logic [(bloock_size-1):0] index;
-    assign index = addr[(block_size+1):2];
+
+    logic [127:0] ram_data [1023:0];
+    logic [1023:0] valid;
+    logic [17:0] tag [1023:0];
+    logic [9:0] index;
+    assign index = addr[13:4];
     always@(posedge clk) begin
         if(ram_tag[index] == addr[26:(block_size+1)]) begin
             read_data<=ram_data[key];

@@ -24,7 +24,7 @@ module test;
     end
 
     initial begin
-     #300;
+     #400;
       $finish;
    end
 
@@ -46,6 +46,15 @@ module test;
       x=32'h40a00000;
       #10;
       x=32'h3c23d70a;
+      #10;
+      x=32'b00001011000101110101111111011111;
+      #10;
+      x=32'b00001111101111111010010101101010;
+      /*for (int i = 0; i < 100; i++) begin
+        x = $urandom;
+        #10;
+        $display("%f -> %f (%f)", $bitstoshortreal(x), $bitstoshortreal(y), $sqrt($bitstoshortreal(x)));
+      end*/
    end
 
 endmodule

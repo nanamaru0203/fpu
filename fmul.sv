@@ -13,6 +13,8 @@ module fmul(input logic [31:0] x1,
    assign {s2,e2,m2}=x2;
    logic [8:0] e1a;
    logic [8:0] e2a;
+   logic zero1;
+   logic zero2;
    assign e1a={1'b0,e1};
    assign e2a={1'b0,e2};
    logic s3;
@@ -37,7 +39,7 @@ module fmul(input logic [31:0] x1,
    logic [22:0] m3;
    assign m3=(sum[25])? sum[24:2] : sum[23:1];
    logic [31:0] tmp;
-   assign tmp=(e3==8'd0)? 32'd0 : {s3_2,e3,m3};
+   assign tmp=(e3==8'd0 | zero2==1'b1)? 32'd0 : {s3_2,e3,m3};
    always@(posedge clk) begin
       //stage1
       //仮数
@@ -48,11 +50,13 @@ module fmul(input logic [31:0] x1,
       e3a<=e1a+e2a+9'd129;
       //符号
       s3<=s1^s2;
+      zero1<=(e1==8'd0 | e2==8'd0)? 1'b1 : 1'b0;
       //stage2
       sum<=hh+(hl>>11)+(lh>>11)+26'd2;
       e3b<=e3a+9'b1;
       e3a_2<=e3a;
       s3_2<=s3;
+      zero2<=zero1;
       //stage3
       y<=tmp;
     end
