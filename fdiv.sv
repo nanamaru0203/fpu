@@ -37,7 +37,7 @@ module fdiv(input logic clk,
         //stage6
         e_diff7<=e_diff6;
         //stage7
-        y<=(tmp[30:23]>=e_diff7)? {tmp[31],tmp[30:23]-e_diff7,tmp[22:0]} : 32'd0;
+        y<=(tmp[30:23]>e_diff7)? {tmp[31],tmp[30:23]-e_diff7,tmp[22:0]} : 32'd0;
     end
 endmodule
 
