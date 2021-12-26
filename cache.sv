@@ -1,27 +1,27 @@
-module cache(input logic [26:0] addr,
+module cache(input logic clk,
+            input logic [26:0] addr,
              input logic [31:0] write_data,
              input logic write,
              input logic enable,
              input logic ddr2_available,
-             input logic [127:0] ddr2_data;
+             input logic [127:0] ddr2_data,
              output logic [31:0] read_data,
              output logic available,
              output logic [26:0] ddr2_addr,
+             output logic [127:0] to_ddr2_data,
              output logic ddr2_enable,
              output logic ddr2_read);
 
     logic [1:0] state;
     integer i;
-    initial begin
-        state=2'b00
-        for(i=0;i<1024;i=i+1) begin
-            valid[i]=1'b0;
-            dirty[i]=1'b0;
-        end
-    end
-    logic [127:0] ram_data [1023:0];
     logic [1023:0] valid;
     logic [1023:0] dirty;
+    initial begin
+        state=2'b00;
+        valid=1024'd0;
+        dirty=1024'd0;
+    end
+    logic [127:0] ram_data [1023:0];
     logic [17:0] tag [1023:0];
     logic [9:0] index;
     logic [9:0] index_save;
@@ -65,11 +65,12 @@ module cache(input logic [26:0] addr,
                 //ミスした場合
                 else begin
                     //dirty bitで場合分け
-                    if(dirty==1'b1) begin
+                    if(dirty[index]==1'b1) begin
                         //ddr2に書き込む
                         ddr2_addr<=addr;
                         ddr2_enable<=1'b1;
                         ddr2_read<=1'b0; 
+                        to_ddr2_data<=ram_data[index];
                         state<=2'b01;   
                     end 
                     else begin
@@ -83,6 +84,9 @@ module cache(input logic [26:0] addr,
                     write_data_save<=write_data;
                     write_save<=write;
                 end
+            end
+            else begin
+                available<=1'b0;
             end
         end
         //ミスした場合の読み込み命令送信
@@ -100,8 +104,7 @@ module cache(input logic [26:0] addr,
                 available<=1'b1;
                 ddr2_enable<=1'b0;
                 valid[index_save]<=1'b1;
-                dirty[index_save]<=1'b0;
-                tag[index_save] <= addr_save[26:14]
+                tag[index_save] <= addr_save[26:14];
                 if(write_save==1'b1) begin
                     if(addr_save[3:2]==2'b00) begin
                         ram_data[index_save]<={ddr2_data[127:32],write_data_save};
@@ -111,10 +114,12 @@ module cache(input logic [26:0] addr,
                         ram_data[index_save]<={ddr2_data[127:96],write_data_save,ddr2_data[63:0]};
                     end else begin
                         ram_data[index_save]<={write_data_save,ddr2_data[95:0]};
-                    end      
+                    end  
+                    dirty[index_save] <= 1'b1;  
                 end
                 else begin
                     ram_data[index_save] <= ddr2_data;
+                    dirty[index_save] <= 1'b0;
                     if(addr_save[3:2]==2'b00) begin
                         read_data<=ddr2_data[31:0];
                     end else if(addr_save[3:2]==2'b01) begin
@@ -124,6 +129,7 @@ module cache(input logic [26:0] addr,
                     end else begin
                         read_data<=ddr2_data[127:96];
                     end
+                    
                 end
             end      
         end
