@@ -101,10 +101,10 @@ module cache(input logic clk,
         end
         //ddr2からデータが送られてくるまで待つ
         else if(state==2'b10) begin
+            ddr2_enable<=1'b0;
             if(ddr2_available==1'b1) begin
                 state<=2'b00;   
                 available<=1'b1;
-                ddr2_enable<=1'b0;
                 valid[index_save]<=1'b1;
                 tag[index_save] <= addr_save[26:14];
                 if(write_save==1'b1) begin
