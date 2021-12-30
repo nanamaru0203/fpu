@@ -81,7 +81,7 @@ module cache(input logic clk,
                     read_data<=ram_data[index_save][31:0];
                 end else if(addr_save[3:2]==2'b01) begin
                     read_data<=ram_data[index_save][63:32];
-                end else if (addr[3:2]==2'b10) begin
+                end else if (addr_save[3:2]==2'b10) begin
                     read_data<=ram_data[index_save][95:64];
                 end else begin
                     read_data<=ram_data[index_save][127:96];
