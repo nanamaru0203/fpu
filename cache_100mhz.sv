@@ -43,14 +43,14 @@ module cache(input logic clk,
                     //dirty bitで場合分け
                     if(dirty[index]==1'b1) begin
                         //ddr2に書き込む
-                        ddr2_addr<=addr;
+                        ddr2_addr<={tag[index],index,4'd0};
                         ddr2_enable<=1'b1;
                         ddr2_read<=1'b0; 
                         to_ddr2_data<=ram_data[index];
                         state<=2'b01;   
                     end 
                     else begin
-                        ddr2_addr<=addr;
+                        ddr2_addr<={addr[26:4],4'd0};
                         ddr2_enable<=1'b1;
                         ddr2_read<=1'b1;
                         state<=2'b10;
@@ -93,7 +93,7 @@ module cache(input logic clk,
         end
         //ミスした場合の読み込み命令送信
         else if(state==2'b01) begin
-            ddr2_addr<=addr_save;
+            ddr2_addr<={addr_save[26:4],4'd0};
             ddr2_enable<=1'b1;
             ddr2_read<=1'b1;
             state<=2'b10;
