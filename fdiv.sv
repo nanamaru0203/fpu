@@ -17,7 +17,6 @@ module fdiv(input logic clk,
     logic [7:0] e_diff4;
     logic [7:0] e_diff5;
     logic [7:0] e_diff6;
-    logic [7:0] e_diff7;
     logic [31:0] x1_2;
     logic [31:0] x1_3;
     always@(posedge clk) begin
@@ -34,10 +33,8 @@ module fdiv(input logic clk,
         e_diff5<=e_diff4;
         //stage5
         e_diff6<=e_diff5;
-        //stage6
-        e_diff7<=e_diff6;
         //stage7
-        y<=(tmp[30:23]>e_diff7)? {tmp[31],tmp[30:23]-e_diff7,tmp[22:0]} : 32'd0;
+        y<=(tmp[30:23]>e_diff6)? {tmp[31],tmp[30:23]-e_diff6,tmp[22:0]} : 32'd0;
     end
 endmodule
 
