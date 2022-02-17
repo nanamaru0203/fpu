@@ -230,7 +230,7 @@ module cache(input logic clk,
         end
         else if(state == 3'b101) begin
             state2<=state2+2'b01;
-            if(stete2 == 2'b00) begin
+            if(state2 == 2'b00) begin
                 to_ddr2_data[31:0]<= read_data;
             end else if(state2==2'b01) begin
                 to_ddr2_data[63:32]<=read_data;
