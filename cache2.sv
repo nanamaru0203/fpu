@@ -91,6 +91,12 @@ module cache(input logic clk,
                         end
                     end     
                 end
+                else begin
+                    if(dirty[index]==1'b1) begin
+                        we=1'b1;
+                        addr_ram = (index<<2);
+                    end
+                end
             end
         end  
         else if(state==3'b011) begin
@@ -136,6 +142,16 @@ module cache(input logic clk,
                 end
             end    
         end
+        else if(state==3'b101) begin
+            we = 1'b0;
+            if(stete2==2'b00) begin
+                addr_ram = (index_save << 2) + 1;
+            end else if(state2==2'b01) begin
+                addr_ram = (index_save << 2) + 2;
+            end else if(state2==2'b10) begin
+                addr_ram = (index_save << 2) + 3;
+            end 
+        end
     end
     always@(posedge clk) begin
         if(state==3'b000) begin
@@ -155,10 +171,11 @@ module cache(input logic clk,
                     if(dirty[index]==1'b1) begin
                         //ddr2に書き込む
                         ddr2_addr<={tag[index],index,4'd0};
-                        ddr2_enable<=1'b1;
+                        //ddr2_enable<=1'b1;
                         ddr2_read<=1'b0; 
-                        to_ddr2_data<=ram_data[index];
-                        state<=3'b001;   
+                        //to_ddr2_data<=ram_data[index];
+                        state<=3'b101;   
+                        state2<=2'b00;
                     end 
                     else begin
                         ddr2_addr<={addr[26:4],4'd0};
@@ -210,6 +227,20 @@ module cache(input logic clk,
         else if(state == 3'b100) begin
             state <= 3'b000;
             available <= 1'b1;
+        end
+        else if(state == 3'b101) begin
+            state2<=state2+2'b01;
+            if(stete2 == 2'b00) begin
+                to_ddr2_data[31:0]<= read_data;
+            end else if(state2==2'b01) begin
+                to_ddr2_data[63:32]<=read_data;
+            end else if(state2==2'b10) begin
+                to_ddr2_data[95:64]<=read_data;
+            end else if(state2==2'b11) begin
+                to_ddr2_data[127:96]<=read_data;
+                ddr2_enable <= 1'b1;
+                state <= 3'b001;
+            end
         end
     end
 endmodule
